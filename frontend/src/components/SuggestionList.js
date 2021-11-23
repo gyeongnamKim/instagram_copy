@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "./SuggestionList.scss";
 import { Card, Button } from "antd";
 import Suggestion from "./Suggestion";
@@ -10,12 +10,29 @@ export default function SuggestionList({ style }) {
     store: { jwtToken },
   } = useAppContext();
 
+  const [userList, setUserList] = useState([]);
+
   const headers = { Authorization: `JWT ${jwtToken}` };
 
-  const [{ data: userList, loading, error }, refetch] = useAxios({
+  const [{ data: originUserList, loading, error }, refetch] = useAxios({
     url: "http://localhost:8000/accounts/suggestions/",
     headers,
   });
+  useEffect(() => {
+    if (!originUserList) setUserList([]);
+    else
+      setUserList(
+        originUserList.map((user) => ({ ...user, is_follow: false }))
+      );
+  }, [originUserList]);
+
+  const onFollowUser = (username) => {
+    setUserList((prevUserList) =>
+      prevUserList.map((user) =>
+        user.username !== username ? user : { ...user, is_follow: true }
+      )
+    );
+  };
 
   return (
     <div style={style}>
@@ -30,6 +47,7 @@ export default function SuggestionList({ style }) {
             <Suggestion
               key={suggestionUser.username}
               suggestionUser={suggestionUser}
+              onFollowUser={onFollowUser}
             />
           ))}
       </Card>
