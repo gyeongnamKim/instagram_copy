@@ -1,16 +1,25 @@
 import { Avatar, Card } from "antd";
 import React from "react";
-import { HeartOutlined, HeartFilled, UserOutlined } from "@ant-design/icons";
+import { HeartOutlined, HeartTwoTone, UserOutlined } from "@ant-design/icons";
 
-function Post({ post }) {
-  const { author, caption, location, photo, tag_set, like_user_set } = post;
+function Post({ post, handleLike }) {
+  const { author, caption, location, photo, tag_set, is_like } = post;
   const { name, username, avatar_url } = author;
   return (
     <div>
       <Card
         hoverable
         cover={<img src={photo} alt={caption} />}
-        actions={[<HeartOutlined />]}
+        actions={[
+          is_like ? (
+            <HeartTwoTone
+              twoToneColor="#eb2f96"
+              onClick={() => handleLike({ post, isLike: false })}
+            />
+          ) : (
+            <HeartOutlined onClick={() => handleLike({ post, isLike: true })} />
+          ),
+        ]}
       >
         <Card.Meta
           avatar={
