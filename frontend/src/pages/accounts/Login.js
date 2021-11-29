@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Form, Input, Button, notification, Card } from "antd";
 import { SmileOutlined, FrownOutlined } from "@ant-design/icons";
 import { useHistory, useLocation } from "react-router-dom";
-import Axios from "axios";
 import { useAppContext, setToken } from "store";
 import "./Login.scss";
 import { parseErrorMessages } from "utils/forms";
+import { axiosInstance } from "api";
 
 export default function Login() {
   const { store, dispatch } = useAppContext();
@@ -24,10 +24,7 @@ export default function Login() {
       setFieldErrors({});
       const data = { username, password };
       try {
-        const response = await Axios.post(
-          "http://localhost:8000/accounts/token/",
-          data
-        );
+        const response = await axiosInstance.post("/accounts/token/", data);
         const {
           data: { token: jwtToken },
         } = response;

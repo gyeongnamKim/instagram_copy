@@ -5,11 +5,8 @@ import { useAppContext } from "store";
 import CommentList from "./CommentList";
 
 function Post({ post, handleLike }) {
-  const {
-    store: { jwtToken },
-  } = useAppContext();
-  const { author, caption, location, photo, tag_set, is_like } = post;
-  const { name, username, avatar_url } = author;
+  const { author, caption, location, photo, is_like } = post;
+  const { username, avatar_url } = author;
 
   return (
     <div>
@@ -31,12 +28,7 @@ function Post({ post, handleLike }) {
           avatar={
             <Avatar
               size="large"
-              icon={
-                <img
-                  src={"http://localhost:8000" + avatar_url}
-                  alt={username}
-                />
-              }
+              icon={<img src={avatar_url} alt={username} />}
             />
           }
           title={location}
