@@ -1,10 +1,16 @@
 import { Avatar, Card } from "antd";
 import React from "react";
-import { HeartOutlined, HeartTwoTone, UserOutlined } from "@ant-design/icons";
+import { HeartOutlined, HeartTwoTone } from "@ant-design/icons";
+import { useAppContext } from "store";
+import CommentList from "./CommentList";
 
 function Post({ post, handleLike }) {
+  const {
+    store: { jwtToken },
+  } = useAppContext();
   const { author, caption, location, photo, tag_set, is_like } = post;
   const { name, username, avatar_url } = author;
+
   return (
     <div>
       <Card
@@ -35,7 +41,10 @@ function Post({ post, handleLike }) {
           }
           title={location}
           description={caption}
-        ></Card.Meta>
+          style={{ marginBottom: "0.5em" }}
+        />
+
+        <CommentList post={post} />
       </Card>
     </div>
   );
